@@ -1,7 +1,10 @@
 #include"PerformanceAnalyzer.h"
 
+//Release re;
+
 PPSection* PerformanceAnalyzer::CreateMap(const char* filename, const char* function, int line, const char* desc)
 {
+	lock_guard<mutex> lock(_mtx);
 	PPNode ppnode(filename,function,line,desc);
 
 	PPSection* ppsection = NULL;
@@ -13,8 +16,11 @@ PPSection* PerformanceAnalyzer::CreateMap(const char* filename, const char* func
 	}
 	else
 	{
+		ppsection = new PPSection;
 		_ppMap.insert(pair<PPNode,PPSection*>(ppnode, ppsection));
 	}
 
 	return ppsection;
 }
+
+
