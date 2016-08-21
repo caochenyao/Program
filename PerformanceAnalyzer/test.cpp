@@ -2,6 +2,10 @@
 
 void Run(int n)
 {
+	SETOPTIONS(PPCO_PERFORMANCE);
+	SETOPTIONS(PPCO_SAVE_TO_CONSOLE);
+	SETOPTIONS(PPCO_SAVE_BY_COSTTIME);
+
 	while (n--)
 	{
 		PERFORMANCE_ANALYER_EE_BEGIN(sql, "Êý¾Ý¿â");
@@ -18,9 +22,9 @@ void Run(int n)
 	}	
 }
 
-int main()
+void Test()
 {
-	Release re;
+	//Release re;
 	thread p1(Run, 1);
 	thread p2(Run, 2);
 	thread p3(Run, 3);
@@ -28,8 +32,13 @@ int main()
 	p1.join();
 	p2.join();
 	p3.join();
+}
 
-	re.~Release();
+int main()
+{
+	Test();
+	DISPLAY();
+
 	system("pause");
 	return 0;
 }
