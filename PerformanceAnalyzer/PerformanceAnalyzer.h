@@ -91,6 +91,7 @@ class Simpleton
 public:
 	static T* GetInstance()
 	{
+		//双重检查保证线程的安全与效率
 		if (_sInstance == NULL)
 		{
 			lock_guard<mutex> lock(_mutex);
@@ -144,6 +145,26 @@ private:
 	int _option;
 };
 
+//获取路径中最后的文件名。
+static string GetFileName(const string& path)
+{
+	char ch = '/';
+
+#ifdef _WIN32
+	ch = '\\';
+#endif
+
+	size_t pos = path.rfind(ch);
+	if (pos == string::npos)
+	{
+		return path;
+	}
+	else
+	{
+		return path.substr(pos + 1);
+	}
+}
+
 struct PPNode
 {
 	string _filename;   //文件名
@@ -153,7 +174,7 @@ struct PPNode
 	string _desc;       //描述
 
 	PPNode(const char* filename, const char* function, int line, const char* desc)
-		:_filename(filename)
+		:_filename(GetFileName(filename))
 		, _function(function)
 		, _line(line)
 		, _desc(desc)
@@ -263,7 +284,7 @@ class Release
 	}
 };
 //配置管理的设置
-#define SETOPTIONS(option)                      \
+#define CONFIG_MANAGER_SETOPTIONS(option)                      \
 	ConfigManager::GetInstance()->SetOptions(option);
 //开始剖析
 #define PERFORMANCE_ANALYER_EE_BEGIN(sign,desc) \
@@ -280,6 +301,6 @@ class Release
 		sign##section->End(GetThreadId());      \
 	}
 //输出剖析结果
-#define DISPLAY()                               \
+#define PERFORMANCE_RESULT_DISPLAY()                               \
 	PerformanceAnalyzer::GetInstance()->Output();
 	

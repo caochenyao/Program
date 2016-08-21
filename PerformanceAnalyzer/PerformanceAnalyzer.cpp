@@ -68,7 +68,7 @@ void PerformanceAnalyzer::_Output(SaveAdapt& sa)
 	}
 
 	sa.Save("====================Performance Profiler Report====================\n\n");
-	for (int index = 0; index < vinfos.size();++index)
+	for (size_t index = 0; index < vinfos.size();++index)
 	{
 		sa.Save("NO.%d Des:%s\n", num++, vinfos[index]->first._desc.c_str());
 		sa.Save("Filename:%s Function:%s Line:%d\n",
